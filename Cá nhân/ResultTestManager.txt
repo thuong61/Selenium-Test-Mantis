@@ -1,0 +1,11 @@
+testcase1:	Chuyen quyen thanh cong!
+testcase2:	Chuyen quyen thanh cong!
+testcase3:	Chuyen quyen thanh cong!
+testcase4:	Chuyen quyen thanh cong!
+testcase5:	Chuyen quyen thanh cong!
+testcase6:	Chuyen quyen thanh cong!
+testcase7:	Chuyen quyen thanh cong!
+testcase8:	Chuyen quyen thanh cong!
+testcase9:	Chuyen quyen thanh cong!
+testcase10:	Chuyen quyen thanh cong!
+

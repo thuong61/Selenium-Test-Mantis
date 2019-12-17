@@ -1,0 +1,2 @@
+forlder Cá nhân chứa file testcase để chạy source và chứ file kết quả của việc chạy test.
+forlder source chứa mã nguồn 
