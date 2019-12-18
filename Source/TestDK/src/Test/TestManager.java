@@ -2,10 +2,21 @@ package Test;
 
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Scanner;
 
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.openxml4j.opc.OPCPackage;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -17,8 +28,6 @@ public class TestManager  {
 private ArrayList<Testcase> list = new ArrayList<>();
 	
 	private void loadTestCaseAdmin() {
-		
-		
 		File filetest= new File("D:/KCPM-2019/Cá nhân/TestcaseManager.txt");
 		try (Scanner sc= new Scanner(filetest)){
 			
@@ -36,6 +45,83 @@ private ArrayList<Testcase> list = new ArrayList<>();
 		};
 	
 	}
+	
+// Load testcase bang file docx
+private void loadTestcaseDoxManager() {
+		
+		
+		try {
+			FileInputStream filetest= new FileInputStream("D:/KCPM-2019/Cá nhân/TestcaseManager.docx");
+		      XWPFDocument doc = new XWPFDocument(OPCPackage.open(filetest));
+		      List<XWPFParagraph> paragraphList = doc.getParagraphs();
+		      for (XWPFParagraph paragraph : paragraphList) {
+		    	  Testcase user = new Testcase(null, null);
+		    	  user.setUser(paragraph.getText());
+		        }
+		      doc.close();
+		} catch(Exception e) {
+			System.out.println("loi doc file" +e.getMessage());
+		};
+}
+	
+	// Load testcase bang file excel 
+private void loadTestcaseExcelManager()
+{
+	try {
+		FileInputStream filetest = new FileInputStream(new File("\"D:/KCPM-2019/Cá nhân/TestcaseManager.xls"));
+		 HSSFWorkbook workbook = new HSSFWorkbook(filetest);
+		 HSSFSheet sheet = workbook.getSheetAt(0);
+		 Iterator<Row> rowIterator = sheet.iterator();
+		 
+		 while (rowIterator.hasNext()) {
+	           Row row = rowIterator.next();
+	           Iterator<Cell> cellIterator = row.cellIterator();
+	           Testcase user = new Testcase(null, null);
+	        	   while (cellIterator.hasNext()) {
+	                   Cell cell = cellIterator.next();
+	               
+	                   CellType cellType = cell.getCellTypeEnum();
+	     
+	                   switch (cellType) {
+	                   case _NONE:
+	                    	   user.setUser("");
+	                     
+	                       break;
+	                   case BOOLEAN:
+	                    	   user.setUser(Boolean.toString(cell.getBooleanCellValue()));
+	                      
+	                       break;
+	                   case BLANK:
+	                    	   user.setUser("");
+	                       break;
+	                   case FORMULA:
+	                    	   user.setUser("####");
+	                       break;
+	                   case NUMERIC:
+	                    	   user.setUser(Double.toString(cell.getNumericCellValue()));
+	                      
+	                       break;
+	                   case STRING:
+	                    	   user.setUser(cell.getStringCellValue());
+	                      
+	                       break;
+	                   case ERROR:
+                    	   user.setUser("!");
+                    
+	                       break;
+	                   }
+	     
+	               }
+	           
+	       }
+		
+	} catch(Exception e) {
+		System.out.println("loi doc file" +e.getMessage());
+	};
+	
+}
+
+
 	private void writeResultAdmin(String result) {
 		File file = new File("D:/KCPM-2019/Cá nhân/ResultTestManager.txt");
 		
@@ -47,6 +133,8 @@ private ArrayList<Testcase> list = new ArrayList<>();
 			System.out.println("loi doc file" +e.getMessage());
 		};
 	}
+	
+	
 	public void startTestManager()
 	{
 		WebDriver webDriver;
